@@ -1,0 +1,469 @@
+<html><head><base href="https://minatochain.io/">
+<title>MinatoChain Mining Dashboard</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f0f2f5;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.container, .swap-container, .status-container, .referral-container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+}
+
+.menu-item {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-weight: bold;
+  color: #333;
+}
+
+.menu-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.container {
+  width: 800px;
+}
+
+.swap-container, .status-container, .referral-container {
+  width: 300px;
+  height: fit-content;
+}
+
+.swap-container {
+  position: sticky;
+  top: 20px;
+  margin-bottom: 20px;
+}
+
+.status-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.referral-container {
+  background: white;
+}
+
+.referral-item {
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.status-text {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.status-text.connected {
+  color: #4CAF50;
+}
+
+.status-text.disabled {
+  color: #f44336;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+input[type="text"], input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+  width: 100%;
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.mining-status {
+  margin: 20px 0;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 5px;
+}
+
+.history {
+  margin-top: 20px;
+}
+
+.history-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.points {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2196F3;
+  margin: 20px 0;
+}
+
+.calculating {
+  color: #ff9800;
+  font-style: italic;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.camera-icon {
+  width: 16px;
+  height: 16px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0% { fill: red; }
+  50% { fill: #00ff00; }
+  100% { fill: red; }
+}
+
+.show-more {
+  color: #2196F3;
+  cursor: pointer;
+  margin-top: 10px;
+  text-decoration: underline;
+}
+
+.swap-input {
+  margin-bottom: 15px;
+}
+
+.swap-arrow {
+  text-align: center;
+  font-size: 24px;
+  margin: 10px 0;
+}
+
+.locked-message {
+  display: none;
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.server-status {
+  color: #4CAF50;
+  font-style: italic;
+  margin-top: 5px;
+  font-size: 12px;
+}
+
+/* Add new CSS for equalizer animation */
+.equalizer {
+  display: inline-flex;
+  height: 20px;
+  gap: 2px;
+  margin-left: 10px;
+}
+
+.bar {
+  width: 3px;
+  background: #4CAF50;
+  animation: equalize 1s infinite;
+}
+
+@keyframes equalize {
+  0% { height: 20%; }
+  50% { height: 100%; }
+  100% { height: 20%; }
+}
+
+/* Offset each bar's animation slightly */
+.bar:nth-child(1) { animation-delay: 0.0s; }
+.bar:nth-child(2) { animation-delay: 0.1s; }
+.bar:nth-child(3) { animation-delay: 0.2s; }
+.bar:nth-child(4) { animation-delay: 0.3s; }
+.bar:nth-child(5) { animation-delay: 0.4s; }
+.bar:nth-child(6) { animation-delay: 0.5s; }
+.bar:nth-child(7) { animation-delay: 0.6s; }
+.bar:nth-child(8) { animation-delay: 0.7s; }
+.bar:nth-child(9) { animation-delay: 0.8s; }
+.bar:nth-child(10) { animation-delay: 0.9s; }
+
+/* Add new style for TGE Airdrop module */
+.tge-airdrop {
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.tge-total {
+  font-weight: bold;
+  color: #2196F3;
+}
+
+</style>
+</head>
+<body>
+<div class="left-panel">
+  <div class="menu-item">P2PTrading</div>
+  <div class="menu-item">OTCTrading</div>
+  <div class="menu-item">TradingBot</div>
+  <div class="menu-item">CoppTrading</div>
+  <div class="menu-item">NFT</div>
+  <div class="menu-item">Card</div>
+  <div class="menu-item">Launchpad</div>
+  <div class="menu-item">Airdrop</div>
+  <div class="menu-item">Shop</div>
+</div>
+
+<div class="container">
+  <h1>MinatoChain Mining Dashboard
+    <div class="equalizer">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+  </h1>
+  
+  <div class="input-group">
+    <label for="wallet">ETH Wallet Address:</label>
+    <input type="text" id="wallet" placeholder="Enter your ETH wallet address">
+  </div>
+
+  <button id="startButton" disabled>Start Mining</button>
+
+  <div class="points">
+    Total Points: <span id="totalPoints">0.00</span>
+  </div>
+
+  <div class="mining-status">
+    Status: <span id="status">Not Mining</span>
+  </div>
+
+  <div class="history">
+    <h2>Mining History</h2>
+    <div id="historyList"></div>
+    <div id="showMore" class="show-more" style="display: none;">Show More</div>
+  </div>
+</div>
+
+<div class="right-panel">
+  <div class="swap-container">
+    <h2>Swap</h2>
+    
+    <div class="swap-input">
+      <label>Points</label>
+      <input type="number" id="pointsInput" placeholder="0.00" min="0">
+    </div>
+    
+    <div class="swap-arrow">↓</div>
+    
+    <div class="swap-input">
+      <label>MNTC</label>
+      <input type="number" id="mntcInput" placeholder="0.00" readonly>
+    </div>
+    
+    <button id="swapButton">Swap</button>
+    <div id="lockedMessage" class="locked-message">This module is locked</div>
+
+    <div class="tge-airdrop">
+      <div>TGE Airdrop</div>
+      <div class="tge-total">Total: 0.000 MNTC</div>
+    </div>
+  </div>
+
+  <div class="referral-container">
+    <div class="referral-item">
+      Complete 10 successful referrals to claim 1,000 Points
+    </div>
+    <div class="referral-item">
+      Complete 20 successful referrals to claim 2,000 Points
+    </div>
+    <div class="referral-item">
+      Complete 100 successful referrals to claim 15,000 Points
+    </div>
+  </div>
+
+  <div class="status-container">
+    <div id="connectionStatus" class="status-text disabled">
+      Disabled
+      <svg class="camera-icon" viewBox="0 0 24 24">
+        <path d="M9 3L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2h-3.17L15 3H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<script>
+let miningInterval;
+let totalPoints = 0;
+let isMinning = false;
+let historyItems = [];
+
+const walletInput = document.getElementById('wallet');
+const startButton = document.getElementById('startButton');
+const statusSpan = document.getElementById('status');
+const totalPointsSpan = document.getElementById('totalPoints');
+const historyList = document.getElementById('historyList');
+const showMoreBtn = document.getElementById('showMore');
+const pointsInput = document.getElementById('pointsInput');
+const mntcInput = document.getElementById('mntcInput');
+const swapButton = document.getElementById('swapButton');
+const lockedMessage = document.getElementById('lockedMessage');
+const connectionStatus = document.getElementById('connectionStatus');
+
+const cameraIcon = `
+<svg class="camera-icon" viewBox="0 0 24 24">
+  <path d="M9 3L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2h-3.17L15 3H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+</svg>`;
+
+function validateEthAddress(address) {
+  return /^0x[a-fA-F0-9]{40}$/.test(address);
+}
+
+function updateHistoryDisplay() {
+  historyList.innerHTML = '';
+  const itemsToShow = historyItems.slice(0, 3); // Change from 5 to 3
+  itemsToShow.forEach(item => historyList.appendChild(item));
+  showMoreBtn.style.display = historyItems.length > 3 ? 'block' : 'none'; // Change from 5 to 3
+}
+
+function addHistoryItem(wallet, points) {
+  const item = document.createElement('div');
+  item.className = 'history-item';
+  item.innerHTML = `
+    <div>Wallet: ${wallet}</div>
+    <div>Points: ${points} <span class="calculating">Calculating... ${cameraIcon}</span></div>
+    <div>Time: ${new Date().toLocaleTimeString()}</div>
+    <div class="server-status">History sent to the server</div>
+  `;
+  historyItems.unshift(item);
+  updateHistoryDisplay();
+}
+
+function startMining() {
+  if (!validateEthAddress(walletInput.value)) return;
+  
+  isMinning = true;
+  statusSpan.textContent = 'Mining in progress...';
+  startButton.textContent = 'Stop Mining';
+  connectionStatus.className = 'status-text connected';
+  connectionStatus.textContent = 'Connected';
+  
+  miningInterval = setInterval(() => {
+    totalPoints += 0.01;
+    totalPointsSpan.textContent = totalPoints.toFixed(2);
+    addHistoryItem(walletInput.value, '0.01');
+  }, 5000);
+}
+
+function stopMining() {
+  isMinning = false;
+  clearInterval(miningInterval);
+  statusSpan.textContent = 'Not Mining';
+  startButton.textContent = 'Start Mining';
+  connectionStatus.className = 'status-text disabled';
+  connectionStatus.textContent = 'Disabled';
+}
+
+pointsInput.addEventListener('input', (e) => {
+  const points = parseFloat(e.target.value) || 0;
+  mntcInput.value = (points * 0.1).toFixed(2);
+});
+
+swapButton.addEventListener('click', () => {
+  lockedMessage.style.display = 'block';
+  setTimeout(() => {
+    lockedMessage.style.display = 'none';
+  }, 3000);
+});
+
+walletInput.addEventListener('input', (e) => {
+  const isValid = validateEthAddress(e.target.value);
+  startButton.disabled = !isValid;
+  
+  if (!e.target.value && isMinning) {
+    stopMining();
+  }
+});
+
+startButton.addEventListener('click', () => {
+  if (isMinning) {
+    stopMining();
+  } else {
+    startMining();
+  }
+});
+
+showMoreBtn.addEventListener('click', () => {
+  if (showMoreBtn.textContent === 'Show More') {
+    historyList.innerHTML = '';
+    historyItems.forEach(item => historyList.appendChild(item));
+    showMoreBtn.textContent = 'Show Less';
+  } else {
+    updateHistoryDisplay();
+    showMoreBtn.textContent = 'Show More';
+  }
+});
+
+// Add interaction for menu items
+document.querySelectorAll('.menu-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const lockedMessage = document.getElementById('lockedMessage');
+    lockedMessage.style.display = 'block';
+    setTimeout(() => {
+      lockedMessage.style.display = 'none';
+    }, 3000);
+  });
+});
+</script>
+</body></html>
